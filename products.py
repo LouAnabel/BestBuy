@@ -2,7 +2,7 @@ class Product:
 
     def __init__(self, name, price, quantity):
         if not name:
-            raise Exception("Product name cannot be empyt!")
+            raise Exception("Product name cannot be empty!")
         if price < 0:
             raise Exception("Price cannot not be negative!")
         if quantity < 0:
@@ -46,6 +46,8 @@ class Product:
         return total_price
 
 
+
+"""
 bose = Product("Bose QuietComfort Earbuds", price=250, quantity=500)
 mac = Product("MacBook Air M2", price=1450, quantity=100)
 
@@ -58,4 +60,4 @@ mac.show()
 
 bose.set_quantity(1000)
 bose.show()
-
+"""
