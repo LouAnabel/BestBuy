@@ -22,11 +22,10 @@ def start():
     return users_choice
 
 
-def build_shopping_list():
+def build_shopping_list(products):
     shopping_list = []
 
     while True:
-
         product_input = input("\nEnter the number for the product (or press Enter to finish): ")
         # Check if user wants to finish
         if product_input.strip() == "":
@@ -37,30 +36,70 @@ def build_shopping_list():
         try:
             product_choice = int(product_input)
             # Check if the number is in the valid range
-            if not (1 <= product_choice <= 3):
-                raise ValueError("Number must be between 1 and 3")
+            if not (1 <= product_choice <= len(products)):
+                print(Fore.RED + f"Error: Number must be between 1 and {len(products)}" + Style.RESET_ALL)
+                continue
+
+            product_index = product_choice - 1
+            selected_product = products[product_index]
+
+            # Check if product is active
+            if not selected_product.is_active():
+                print(Fore.RED + f"Error: {selected_product.name} is not available" + Style.RESET_ALL)
+                continue
+
+            # Check if product is in stock
+            if selected_product.get_quantity() <= 0:
+                print(Fore.RED + f"Error: {selected_product.name} is out of stock" + Style.RESET_ALL)
+                continue
 
             # Get quantity for the selected product
-            while True:
+            quantity_valid = False
+            while not quantity_valid:
                 try:
-                    quantity = int(input("What amount do you want? "))
-                    break  # Exit the quantity loop if successful
+                    quantity = int(input(f"What amount of {selected_product.name} do you want? "))
+                    if quantity <= 0:
+                        print(Fore.RED + "Error: Quantity must be at least 1" + Style.RESET_ALL)
+                        continue
+
+                    if quantity > selected_product.get_quantity():
+                        print(Fore.RED + f"Error: Not enough stock. Only {selected_product.get_quantity()} available" + Style.RESET_ALL)
+                        continue
+
+                    quantity_valid = True
+
                 except ValueError:
                     print(Fore.RED + "No valid number entered! Enter only integers." + Style.RESET_ALL)
                     continue
 
-            # Add the product and quantity as a tuple to the shopping list
-            shopping_list.append((product_choice - 1 , quantity))
-            print(f"Added product #{product_choice}, quantity: {quantity}")
+            shopping_list.append((product_index, quantity))
+            print(f"Added {quantity} x {selected_product.name} to your cart")
 
-        except ValueError as e:
-            if "Number must be between" in str(e):
-                print(Fore.RED + str(e) + Style.RESET_ALL)
-            else:
-                print(Fore.RED + "No valid number entered! Enter only integers." + Style.RESET_ALL)
+        except ValueError:
+            print(Fore.RED + "Error: Please enter a valid product number" + Style.RESET_ALL)
+            continue
 
     return shopping_list
 
+def process_order(products, shopping_list):
+    if not shopping_list:
+        print(Fore.RED + "No items in cart." + Style.RESET_ALL)
+        return 0
+
+    total_price = 0
+    print("\nOrder Summary:")
+
+    for product_index, quantity in shopping_list:
+        product = products[product_index]
+        try:
+            item_price = product.buy(quantity)
+            total_price += item_price
+            print(f"- {quantity} x {product.name}: ${item_price:.2f}")
+        except Exception as e:
+            print(Fore.RED + f"Could not process {product.name}: {str(e)}" + Style.RESET_ALL)
+
+    print(f"\nTotal Order Price: ${total_price:.2f}")
+    return total_price
 
 def main():
 
@@ -83,18 +122,23 @@ def main():
             print(best_buy.get_total_quantity())
 
         if user_choice == "3":
-            print("\nAvailable are: ")
-            index = 1
-            for product in products:
-                products_info = product.show()
-                print(f"{index}. {products_info}")
-                index += 1
+            print("\nAvailable Products:")
+            for i, product in enumerate(products, 1):
+                if product.is_active():
+                    print(f"{i}. {product.show()}")
 
-            shopping_list = build_shopping_list()
-            new_shopping_list = []
-            for product_nr, amount in shopping_list:
-                new_shopping_list.append((products[product_nr], amount))
-            best_buy.order(new_shopping_list)
+            # First build the shopping list (multiple items)
+            shopping_list = build_shopping_list(products)
+
+            # Then process the order once when complete
+            if shopping_list:
+                new_shopping_list = []
+                for product_nr, amount in shopping_list:
+                    new_shopping_list.append((products[product_nr], amount))
+                # Use your best_buy.order(new_shopping_list) here
+                # Or use the process_order function:
+                process_order(products, shopping_list)
+                best_buy.order(new_shopping_list)
 
         if user_choice == "4":
             print("Goodbye")
@@ -102,3 +146,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
