@@ -1,6 +1,6 @@
 import products
 from stores import Store
-from colorama import Fore
+from colorama import Fore, Style
 
 # setup initial stock of inventory
 product_list = [ products.Product("MacBook Air M2", price=1450, quantity=100),
@@ -46,7 +46,7 @@ def build_shopping_list():
                     quantity = int(input("What amount do you want? "))
                     break  # Exit the quantity loop if successful
                 except ValueError:
-                    print(Fore.RED + "No valid number entered! Enter only integers." + Fore.BLACK)
+                    print(Fore.RED + "No valid number entered! Enter only integers." + Style.RESET_ALL)
                     continue
 
             # Add the product and quantity as a tuple to the shopping list
@@ -55,9 +55,9 @@ def build_shopping_list():
 
         except ValueError as e:
             if "Number must be between" in str(e):
-                print(Fore.RED + str(e) + Fore.BLACK)
+                print(Fore.RED + str(e) + Style.RESET_ALL)
             else:
-                print(Fore.RED + "No valid number entered! Enter only integers." + Fore.BLACK)
+                print(Fore.RED + "No valid number entered! Enter only integers." + Style.RESET_ALL)
 
     return shopping_list
 
@@ -69,8 +69,8 @@ def main():
         best_buy = Store(product_list)
         products = best_buy.get_all_products()
 
-        if user_choice not in "1234":
-            print(Fore.RED + "\nChoice not available! Type number for available commands!" + Fore.BLACK)
+        if user_choice not in ["1", "2", "3", "4"]:
+            print(Fore.RED + "\nChoice not available! Type number for available commands!" + Style.RESET_ALL)
             continue
 
         if user_choice == "1":
