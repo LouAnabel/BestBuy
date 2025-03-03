@@ -23,8 +23,10 @@ class Store:
         for product, quantity in shopping_list:
             if product not in self.products:
                 raise Exception(f"Product {product.name} not available!")
-            if product.quantity < quantity:
+                continue
+            """if quantity > product.quantity:
                 raise Exception(f"Not enough items in stock")
+                continue"""
 
             product.quantity -= quantity
             total_price += float(product.price * quantity)

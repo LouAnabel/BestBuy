@@ -139,6 +139,7 @@ def main():
                 # Or use the process_order function:
                 process_order(products, shopping_list)
                 best_buy.order(new_shopping_list)
+            continue
 
         if user_choice == "4":
             print("Goodbye")
