@@ -135,6 +135,7 @@ def main():
                 new_shopping_list = []
                 for product_nr, amount in shopping_list:
                     new_shopping_list.append((products[product_nr], amount))
+
                 # Use your best_buy.order(new_shopping_list) here
                 # Or use the process_order function:
                 process_order(products, shopping_list)
