@@ -43,6 +43,10 @@ class Product:
 
         total_price = quantity * self.price
         self.set_quantity(self.quantity - quantity)
+
+        # Print item purchase information
+        print(f"- {quantity} x {self.name}: ${total_price:.2f}")
+
         return total_price
 
 

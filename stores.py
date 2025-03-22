@@ -31,3 +31,5 @@ class Store:
 
         print(f"_____________________________________"
                   f"\nTotal price: {total_price} €")
+
+
