@@ -1,7 +1,19 @@
+from products import Product
+
+
 class Store:
 
-    def __init__(self, products):
-        self.products = products if products is not None else []
+    def __init__(self, products=None):
+        # Default to empty list if products is None
+        if products is None:
+            self.products = []
+        else:
+            # Verify each item is a Product instance
+            for product in products:
+                if not isinstance(product, Product):
+                    raise TypeError(f"All items must be Product instances, got {type(product).__name__}")
+
+            self.products = products
 
     def add_product(self, product):
         self.products.append(product)
@@ -11,25 +23,31 @@ class Store:
             self.products.remove(product)
 
     def get_total_quantity(self):
-       total_sum = sum(product.quantity for product in self.products)
-       return f"Total items of {total_sum} in store"
+        """Returns the total quantity of all products as an integer."""
+        return sum(product.quantity for product in self.products)
 
     def get_all_products(self):
-        return [product for product in self.products if product.active ]
+        return [product for product in self.products if product.active]
 
     def order(self, shopping_list):
-
+        """Process an order based on a shopping list and return the total price."""
         total_price = 0
+        order_details = []
+
         for product, quantity in shopping_list:
             if product not in self.products:
                 raise Exception(f"Product {product.name} not available!")
-                continue
 
-            product.quantity -= quantity
-            total_price += float(product.price * quantity)
-            print(f"{quantity} * {product.name} for {product.price}€")
+            # Use product's buy method to ensure proper validation and deactivation logic
+            item_price = product.buy(quantity)
+            total_price += item_price
+            order_details.append(f"{quantity} * {product.name} for {product.price}€")
 
-        print(f"_____________________________________"
-                  f"\nTotal price: {total_price} €")
+        # Print order summary
+        for detail in order_details:
+            print(detail)
 
+        print(f"_____________________________________")
+        print(f"Total price: {total_price:.2f} €")
 
+        return total_price
