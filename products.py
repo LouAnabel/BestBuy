@@ -1,6 +1,8 @@
 class Product:
+    """Represents a product in a store inventory system."""
 
     def __init__(self, name, price, quantity):
+        """Initialize a Product with name, price, and quantity."""
         if not name:
             raise ValueError("Product name cannot be empty!")
         if price < 0:
@@ -18,10 +20,14 @@ class Product:
         self.quantity = quantity
         self.active = True
 
+
     def get_quantity(self):
+        """Return the current quantity of the product."""
         return self.quantity
 
+
     def set_quantity(self, quantity):
+        """Update the quantity and deactivate if it reaches zero."""
         try:
             quantity = int(quantity)
         except (ValueError, TypeError):
@@ -34,19 +40,29 @@ class Product:
         if self.quantity <= 0:
             self.deactivate()
 
+
     def is_active(self):
+        """Check if the product is active and available for purchase."""
         return self.active
 
+
     def activate(self):
+        """Make the product available for purchase."""
         self.active = True
 
+
     def deactivate(self):
+        """Make the product unavailable for purchase."""
         self.active = False
 
+
     def show(self):
+        """Return a formatted string with product details."""
         return f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
 
+
     def buy(self, quantity):
+        """Process a purchase and update inventory accordingly."""
         # First check if the product is active
         if not self.active:
             raise ValueError("Product is not active and cannot be purchased!")
