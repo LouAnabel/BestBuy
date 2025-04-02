@@ -1,19 +1,21 @@
+from colorama import Fore, Style
+
 class Product:
     """Represents a product in a store inventory system."""
 
     def __init__(self, name, price, quantity):
         """Initialize a Product with name, price, and quantity."""
         if not name:
-            raise ValueError("Product name cannot be empty!")
+            raise ValueError(Fore.RED + "Product name cannot be empty!" + Style.RESET_ALL)
         if price < 0:
-            raise ValueError("Price cannot be negative!")
+            raise ValueError(Fore.RED + "Price cannot be negative!" + Style.RESET_ALL)
         if quantity < 0:
-            raise ValueError("Quantity cannot be negative!")
+            raise ValueError(Fore.RED + "Quantity cannot be negative!" + Style.RESET_ALL)
 
         try:
             quantity = int(quantity)
         except (ValueError, TypeError):
-            raise ValueError("Quantity must be a valid integer!")
+            raise ValueError(Fore.RED + "Quantity must be a valid integer!" + Style.RESET_ALL)
 
         self.name = name
         self.price = price
@@ -31,10 +33,10 @@ class Product:
         try:
             quantity = int(quantity)
         except (ValueError, TypeError):
-            raise ValueError("Quantity must be a valid integer!")
+            raise ValueError(Fore.RED + "Quantity must be a valid integer!" + Style.RESET_ALL)
 
         if quantity < 0:
-            raise ValueError("Quantity cannot be negative!")
+            raise ValueError(Fore.RED + "Quantity cannot be negative!" + Style.RESET_ALL)
 
         self.quantity = quantity
         if self.quantity <= 0:
@@ -66,25 +68,22 @@ class Product:
 
         # First check if the product is active
         if not self.active:
-            raise ValueError("Product is not active and cannot be purchased!")
+            raise ValueError(Fore.RED + "Product is not active and cannot be purchased!" + Style.RESET_ALL)
 
         try:
             quantity = int(quantity)
         except (ValueError, TypeError):
-            raise ValueError("Quantity must be a valid integer!")
+            raise ValueError(Fore.RED + "Quantity must be a valid integer!" + Style.RESET_ALL)
 
         # Then check if the requested quantity is valid
         if quantity <= 0:
-            raise ValueError("Quantity to buy must be at least 1!")
+            raise ValueError(Fore.RED + "Quantity to buy must be at least 1!" + Style.RESET_ALL)
 
         # Finally check if we have enough stock
         if quantity > self.quantity:
-            raise ValueError("Not enough items in stock!")
+            raise ValueError(Fore.RED + "Not enough items in stock!" + Style.RESET_ALL)
 
         total_price = quantity * self.price
         self.set_quantity(self.quantity - quantity)
-
-        # Print item purchase information
-        print(f"- {quantity} x {self.name}: ${total_price:.2f}")
 
         return total_price

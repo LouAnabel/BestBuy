@@ -78,7 +78,7 @@ def build_shopping_list(products):
         quantity = get_requested_quantity(selected_product)
 
         shopping_list.append((product_index, quantity))
-        print(f"Added {quantity} x {selected_product.name} to your cart")
+        print(Fore.BLUE + f"Added {quantity} x {selected_product.name} to your cart" + Style.RESET_ALL)
 
     return shopping_list
 

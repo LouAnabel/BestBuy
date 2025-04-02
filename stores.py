@@ -1,4 +1,5 @@
 from products import Product
+from colorama import Fore, Style
 
 
 class Store:
@@ -11,7 +12,7 @@ class Store:
             # Verify each item is a Product instance
             for product in products:
                 if not isinstance(product, Product):
-                    raise TypeError(f"All items must be Product instances, got {type(product).__name__}")
+                    raise TypeError(Fore.RED + f"All items must be Product instances, got {type(product).__name__}" + Style.RESET_ALL)
 
             self.products = products
 
@@ -36,18 +37,18 @@ class Store:
 
         for product, quantity in shopping_list:
             if product not in self.products:
-                raise Exception(f"Product {product.name} not available!")
+                raise Exception(Fore.RED + f"Product {product.name} not available!" + Style.RESET_ALL)
 
             # Use product's buy method to ensure proper validation and deactivation logic
             item_price = product.buy(quantity)
             total_price += item_price
-            order_details.append(f"{quantity} * {product.name} for {product.price}€")
+            order_details.append(Fore.BLUE + f"{quantity} * {product.name} for {product.price}€")
 
         # Print order summary
         for detail in order_details:
             print(detail)
 
         print(f"_____________________________________")
-        print(f"Total price: {total_price:.2f} €")
+        print(f"Total price: {total_price:.2f} €" + Style.RESET_ALL)
 
         return total_price
