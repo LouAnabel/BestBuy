@@ -17,6 +17,7 @@ def start():
     users_choice = input("\nPlease enter your choice by number (1-4): ")
     return users_choice
 
+
 def get_product_number(products):
     """Get and validate product number from user."""
     while True:
@@ -95,8 +96,9 @@ def process_order(products, shopping_list):
         try:
             item_price = product.buy(quantity)
             total_price += item_price
-        except Exception as e:
+        except ValueError as e:
             print(Fore.RED + f"Could not process {product.name}: {str(e)}" + Style.RESET_ALL)
+            continue  # Skip to the next item if there's an error
 
     print(f"\nTotal Order Price: ${total_price:.2f}")
     return total_price
@@ -131,9 +133,11 @@ def handle_shopping(store, products):
         for product_nr, amount in shopping_list:
             new_shopping_list.append((products[product_nr], amount))
 
-        # Process the order
-        process_order(products, shopping_list)
-        store.order(new_shopping_list)
+        # Only call store.order() and remove process_order()
+        try:
+            store.order(new_shopping_list)
+        except ValueError as e:
+            print(Fore.RED + f"Error processing order: {str(e)}" + Style.RESET_ALL)
 
 
 def main():
