@@ -83,27 +83,6 @@ def build_shopping_list(products):
     return shopping_list
 
 
-def process_order(products, shopping_list):
-    if not shopping_list:
-        print(Fore.RED + "No items in cart." + Style.RESET_ALL)
-        return 0
-
-    total_price = 0
-    print("\nOrder Summary:")
-
-    for product_index, quantity in shopping_list:
-        product = products[product_index]
-        try:
-            item_price = product.buy(quantity)
-            total_price += item_price
-        except ValueError as e:
-            print(Fore.RED + f"Could not process {product.name}: {str(e)}" + Style.RESET_ALL)
-            continue  # Skip to the next item if there's an error
-
-    print(f"\nTotal Order Price: ${total_price:.2f}")
-    return total_price
-
-
 def display_all_products(products):
     """Display all products in the store."""
     print(" ")
@@ -117,7 +96,7 @@ def display_total_quantity(store):
     print(store.get_total_quantity())
 
 
-def handle_shopping(store, products):
+def process_order(store, products):
     """Handle the shopping process including building list and processing order."""
     print("\nAvailable Products:")
     for i, product in enumerate(products, 1):
@@ -165,7 +144,7 @@ def main():
             display_total_quantity(best_buy)
 
         elif user_choice == "3":
-            handle_shopping(best_buy, available_products)
+            process_order(best_buy, available_products)
 
         elif user_choice == "4":
             print("Goodbye")

@@ -63,6 +63,7 @@ class Product:
 
     def buy(self, quantity):
         """Process a purchase and update inventory accordingly."""
+
         # First check if the product is active
         if not self.active:
             raise ValueError("Product is not active and cannot be purchased!")
