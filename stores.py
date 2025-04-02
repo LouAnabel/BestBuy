@@ -25,7 +25,9 @@ class Store:
 
     def get_total_quantity(self):
         """Returns the total quantity of all products as an integer."""
-        return sum(product.quantity for product in self.products)
+        sum_quantity = sum(product.quantity for product in self.products)
+        quantity = int(sum_quantity)
+        return quantity
 
     def get_all_products(self):
         return [product for product in self.products if product.active]
@@ -37,7 +39,7 @@ class Store:
 
         for product, quantity in shopping_list:
             if product not in self.products:
-                raise Exception(Fore.RED + f"Product {product.name} not available!" + Style.RESET_ALL)
+                raise Exception(Fore.RED + f"Product is not available!" + Style.RESET_ALL)
 
             # Use product's buy method to ensure proper validation and deactivation logic
             item_price = product.buy(quantity)

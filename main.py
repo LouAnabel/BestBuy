@@ -93,7 +93,7 @@ def display_all_products(products):
 def display_total_quantity(store):
     """Display the total quantity of all products in the store."""
     print(" ")
-    print(store.get_total_quantity())
+    print(Fore.GREEN + f"{store.get_total_quantity()}" + Style.RESET_ALL)
 
 
 def process_order(store, products):
@@ -107,16 +107,19 @@ def process_order(store, products):
     shopping_list = build_shopping_list(products)
 
     # Then process the order once when complete
-    if shopping_list:
-        new_shopping_list = []
-        for product_nr, amount in shopping_list:
-            new_shopping_list.append((products[product_nr], amount))
+    if not shopping_list:
+        print(Fore.RED + "Process of order is not possible because the shopping list is empty" + Style.RESET_ALL)
+        return
+
+    new_shopping_list = []
+    for product_nr, amount in shopping_list:
+        new_shopping_list.append((products[product_nr], amount))
 
         # Only call store.order() and remove process_order()
-        try:
-            store.order(new_shopping_list)
-        except ValueError as e:
-            print(Fore.RED + f"Error processing order: {str(e)}" + Style.RESET_ALL)
+    try:
+        store.order(new_shopping_list)
+    except ValueError as e:
+        print(Fore.RED + f"Error processing order: {str(e)}" + Style.RESET_ALL)
 
 
 def main():
