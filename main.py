@@ -2,13 +2,9 @@ import products
 from stores import Store
 from colorama import Fore, Style
 
-# setup initial stock of inventory
-product_list = [ products.Product("MacBook Air M2", price=1450, quantity=100),
-                 products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
-                 products.Product("Google Pixel 7", price=500, quantity=250)
-               ]
 
 def start():
+    """printing the menu"""
     print("\n-----------------")
     print("Store Menu")
     print( "-----------------")
@@ -41,23 +37,14 @@ def get_product_number(products):
             product_index = product_choice - 1
             selected_product = products[product_index]
 
-            # Check if product is active
-            if not selected_product.is_active():
-                print(Fore.RED + f"Error: {selected_product.name} is not available" + Style.RESET_ALL)
-                continue
-
-            # Check if product is in stock
-            if selected_product.get_quantity() <= 0:
-                print(Fore.RED + f"Error: {selected_product.name} is out of stock" + Style.RESET_ALL)
-                continue
-
             return product_index, selected_product
 
         except ValueError:
             print(Fore.RED + "Error: Please enter a valid product number" + Style.RESET_ALL)
             continue
 
-def get_product_quantity(product):
+
+def get_requested_quantity(product):
     """Get and validate quantity from user for a specific product."""
     while True:
         try:
@@ -87,7 +74,7 @@ def build_shopping_list(products):
             break
 
         product_index, selected_product = result
-        quantity = get_product_quantity(selected_product)
+        quantity = get_requested_quantity(selected_product)
 
         shopping_list.append((product_index, quantity))
         print(f"Added {quantity} x {selected_product.name} to your cart")
@@ -150,24 +137,31 @@ def handle_shopping(store, products):
 
 
 def main():
+
+    # setup initial stock of inventory
+    product_list = [products.Product("MacBook Air M2", price=1450, quantity=100),
+                    products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
+                    products.Product("Google Pixel 7", price=500, quantity=250)
+                    ]
+
     best_buy = Store(product_list)
 
     while True:
         user_choice = start()
-        products = best_buy.get_all_products()
+        available_products = best_buy.get_all_products()
 
         if user_choice not in ["1", "2", "3", "4"]:
             print(Fore.RED + "\nChoice not available! Type number for available commands!" + Style.RESET_ALL)
             continue
 
         elif user_choice == "1":
-            display_all_products(products)
+            display_all_products(available_products)
 
         elif user_choice == "2":
             display_total_quantity(best_buy)
 
         elif user_choice == "3":
-            handle_shopping(best_buy, products)
+            handle_shopping(best_buy, available_products)
 
         elif user_choice == "4":
             print("Goodbye")
